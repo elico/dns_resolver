@@ -28,7 +28,13 @@ func New(servers []string) *DnsResolver {
 
 	return &DnsResolver{servers, len(servers) * 2, rand.New(rand.NewSource(time.Now().UnixNano()))}
 }
+func NewWithPort(servers []string, port string) *DnsResolver {
+	for i := range servers {
+		servers[i] += ":"+port
+	}
 
+	return &DnsResolver{servers, len(servers) * 2, rand.New(rand.NewSource(time.Now().UnixNano()))}
+}
 // NewFromResolvConf initializes DnsResolver from resolv.conf like file.
 func NewFromResolvConf(path string) (*DnsResolver, error) {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
